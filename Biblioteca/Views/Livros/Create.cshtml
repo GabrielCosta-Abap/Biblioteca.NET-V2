@@ -1,0 +1,68 @@
+﻿@model Biblioteca.Models.ViewModels.LivroFromViewModels
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Livro</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Livro.NomeLivro" class="control-label"></label>
+                <input asp-for="Livro.NomeLivro" class="form-control" />
+                <span asp-validation-for="Livro.NomeLivro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.AutorId" class="control-label"></label>
+                <select asp-for="Livro.AutorId" class="form-control" asp-items="@(new SelectList(Model.Autors, "Id", "NomeAutor"))"></select>
+                <span asp-validation-for="Livro.AutorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.Editora" class="control-label"></label>
+                <input asp-for="Livro.Editora" class="form-control" />
+                <span asp-validation-for="Livro.Editora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.Ano" class="control-label"></label>
+                <input asp-for="Livro.Ano" class="form-control" />
+                <span asp-validation-for="Livro.Ano" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.tema" class="control-label"></label>
+                <input asp-for="Livro.tema" class="form-control" />
+                <span asp-validation-for="Livro.tema" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.NumVolume" class="control-label"></label>
+                <input asp-for="Livro.NumVolume" class="form-control" />
+                <span asp-validation-for="Livro.NumVolume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.QtdVolumes" class="control-label"></label>
+                <input asp-for="Livro.QtdVolumes" class="form-control" />
+                <span asp-validation-for="Livro.QtdVolumes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livro.ValorLocacao" class="control-label"></label>
+                <input asp-for="Livro.ValorLocacao" class="form-control" />
+                <span asp-validation-for="Livro.ValorLocacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
