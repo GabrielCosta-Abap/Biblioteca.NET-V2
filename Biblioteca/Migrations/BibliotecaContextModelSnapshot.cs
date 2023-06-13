@@ -78,6 +78,64 @@ namespace Biblioteca.Migrations
 
                     b.ToTable("Cliente");
                 });
+
+            modelBuilder.Entity("Biblioteca.Models.Livro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Ano")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AutorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Editora")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeLivro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumVolume")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QtdVolumes")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ValorLocacao")
+                        .HasColumnType("float");
+
+                    b.Property<string>("tema")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutorId");
+
+                    b.ToTable("Livro");
+                });
+
+            modelBuilder.Entity("Biblioteca.Models.Livro", b =>
+                {
+                    b.HasOne("Biblioteca.Models.Autor", "Autor")
+                        .WithMany("Livros")
+                        .HasForeignKey("AutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Autor");
+                });
+
+            modelBuilder.Entity("Biblioteca.Models.Autor", b =>
+                {
+                    b.Navigation("Livros");
+                });
 #pragma warning restore 612, 618
         }
     }
