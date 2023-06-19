@@ -19,5 +19,7 @@ namespace Biblioteca.Data
         public DbSet<Biblioteca.Models.Cliente>? Cliente { get; set; }
 
         public DbSet<Biblioteca.Models.Livro>? Livro { get; set; }
+
+        public DbSet<Biblioteca.Models.Usuario>? Usuario { get; set; }
     }
 }
