@@ -1,0 +1,69 @@
+﻿@model Biblioteca.Models.Locacao
+
+@{
+    ViewData["Title"] = "Alterar";
+}
+
+<h1>Alterar</h1>
+
+<h4>Locação</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="LivroId" class="control-label"></label>
+                <select asp-for="LivroId" class="form-control" asp-items="ViewBag.LivroId"></select>
+                <span asp-validation-for="LivroId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteId" class="control-label"></label>
+                <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId"></select>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioId" class="control-label"></label>
+                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataHoraLocacao" class="control-label"></label>
+                <input asp-for="DataHoraLocacao" class="form-control" />
+                <span asp-validation-for="DataHoraLocacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataPrevista" class="control-label"></label>
+                <input asp-for="DataPrevista" class="form-control" />
+                <span asp-validation-for="DataPrevista" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataDevolucao" class="control-label"></label>
+                <input asp-for="DataDevolucao" class="form-control" />
+                <span asp-validation-for="DataDevolucao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ValorLocacao" class="control-label"></label>
+                <input asp-for="ValorLocacao" class="form-control" />
+                <span asp-validation-for="ValorLocacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MultaAtraso" class="control-label"></label>
+                <input asp-for="MultaAtraso" class="form-control" />
+                <span asp-validation-for="MultaAtraso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar à lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
