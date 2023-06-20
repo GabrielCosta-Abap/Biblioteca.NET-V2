@@ -1,0 +1,65 @@
+﻿@model Biblioteca.Models.ViewModels.LocacaoFromViewModels
+
+@{
+    ViewData["Title"] = "Nova Locação";
+}
+
+<h1>Nova Locação</h1>
+
+<h4>Informe os dados da locação</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Locacao.LivroId" class="control-label"></label>
+                <select asp-for="Locacao.LivroId" class="form-control" asp-items="@(new SelectList(Model.Livros, "Id", "NomeLivro"))"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.ClienteId" class="control-label"></label>
+                <select asp-for="Locacao.ClienteId" class="form-control" asp-items="@(new SelectList(Model.Clientes, "Id", "NomeCliente"))"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.UsuarioId" class="control-label"></label>
+                <select asp-for="Locacao.UsuarioId" class="form-control" asp-items="@(new SelectList(Model.Usuarios, "Id", "Nome"))"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.DataHoraLocacao" class="control-label"></label>
+                <input asp-for="Locacao.DataHoraLocacao" class="form-control" />
+                <span asp-validation-for="Locacao.DataHoraLocacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.DataPrevista" class="control-label"></label>
+                <input asp-for="Locacao.DataPrevista" class="form-control" />
+                <span asp-validation-for="Locacao.DataPrevista" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.DataDevolucao" class="control-label"></label>
+                <input asp-for="Locacao.DataDevolucao" class="form-control" />
+                <span asp-validation-for="Locacao.DataDevolucao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.ValorLocacao" class="control-label"></label>
+                <input asp-for="Locacao.ValorLocacao" class="form-control" />
+                <span asp-validation-for="Locacao.ValorLocacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Locacao.MultaAtraso" class="control-label"></label>
+                <input asp-for="Locacao.MultaAtraso" class="form-control" />
+                <span asp-validation-for="Locacao.MultaAtraso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar à lista</a>
+</div>
+
+@section Scripts {  
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
