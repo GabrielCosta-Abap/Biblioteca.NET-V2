@@ -20,6 +20,8 @@ namespace Biblioteca.Data
 
         public DbSet<Biblioteca.Models.Livro>? Livro { get; set; }
 
+        public DbSet<Biblioteca.Models.Locacao>? Locacao { get; set; }
+
         public DbSet<Biblioteca.Models.Usuario>? Usuario { get; set; }
     }
 }
