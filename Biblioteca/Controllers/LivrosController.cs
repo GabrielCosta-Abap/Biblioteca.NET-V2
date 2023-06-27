@@ -10,6 +10,7 @@ using Biblioteca.Models;
 using Biblioteca.Models.ViewModels;
 using NuGet.Protocol.Plugins;
 using System.Net;
+using MessagePack.Formatters;
 
 namespace Biblioteca.Controllers
 {
@@ -83,7 +84,11 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            return View(livro);
+            LivroFromViewModels LivroViewModel = new LivroFromViewModels();
+            LivroViewModel.Livro = livro;
+            LivroViewModel.Autors = _context.Autor.ToList();
+
+            return View(LivroViewModel);
         }
 
         // POST: Livros/Edit/5
@@ -91,34 +96,17 @@ namespace Biblioteca.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeLivro,IdAutor,Editora,Ano,tema,NumVolume,QtdVolumes,ValorLocacao")] Livro livro)
+        public async Task<IActionResult> Edit(LivroFromViewModels viewModel)
         {
-            if (id != livro.Id)
+            if (!_context.Livro.Any(s => s.Id == viewModel.Livro.Id))
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(livro);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LivroExists(livro.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(livro);
+            _context.Update(viewModel.Livro);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Livros/Delete/5

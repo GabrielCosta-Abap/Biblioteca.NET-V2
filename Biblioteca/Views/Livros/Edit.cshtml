@@ -1,10 +1,9 @@
-﻿@model Biblioteca.Models.Livro
-
+﻿@model Biblioteca.Models.ViewModels.LivroFromViewModels
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Alterar";
 }
 
-<h1>Edit</h1>
+<h1>Alterar</h1>
 
 <h4>Livro</h4>
 <hr />
@@ -12,49 +11,49 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Livro.Id" />
             <div class="form-group">
-                <label asp-for="NomeLivro" class="control-label"></label>
-                <input asp-for="NomeLivro" class="form-control" />
-                <span asp-validation-for="NomeLivro" class="text-danger"></span>
+                <label asp-for="Livro.NomeLivro" class="control-label"></label>
+                <input asp-for="Livro.NomeLivro" class="form-control" />
+                <span asp-validation-for="Livro.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AutorId" class="control-label"></label>
-                <input asp-for="AutorId" class="form-control" />
-                <span asp-validation-for="AutorId" class="text-danger"></span>
+                <label asp-for="Livro.AutorId" class="control-label"></label>
+                <select asp-for="Livro.AutorId" class="form-control" asp-items="@(new SelectList(Model.Autors, "Id", "NomeAutor"))"></select>
+                <span asp-validation-for="Livro.AutorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Editora" class="control-label"></label>
-                <input asp-for="Editora" class="form-control" />
-                <span asp-validation-for="Editora" class="text-danger"></span>
+                <label asp-for="Livro.Editora" class="control-label"></label>
+                <input asp-for="Livro.Editora" class="form-control" />
+                <span asp-validation-for="Livro.Editora" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ano" class="control-label"></label>
-                <input asp-for="Ano" class="form-control" />
-                <span asp-validation-for="Ano" class="text-danger"></span>
+                <label asp-for="Livro.Ano" class="control-label"></label>
+                <input asp-for="Livro.Ano" class="form-control" />
+                <span asp-validation-for="Livro.Ano" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="tema" class="control-label"></label>
-                <input asp-for="tema" class="form-control" />
-                <span asp-validation-for="tema" class="text-danger"></span>
+                <label asp-for="Livro.tema" class="control-label"></label>
+                <input asp-for="Livro.tema" class="form-control" />
+                <span asp-validation-for="Livro.tema" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumVolume" class="control-label"></label>
-                <input asp-for="NumVolume" class="form-control" />
-                <span asp-validation-for="NumVolume" class="text-danger"></span>
+                <label asp-for="Livro.NumVolume" class="control-label"></label>
+                <input asp-for="Livro.NumVolume" class="form-control" />
+                <span asp-validation-for="Livro.NumVolume" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QtdVolumes" class="control-label"></label>
-                <input asp-for="QtdVolumes" class="form-control" />
-                <span asp-validation-for="QtdVolumes" class="text-danger"></span>
+                <label asp-for="Livro.QtdVolumes" class="control-label"></label>
+                <input asp-for="Livro.QtdVolumes" class="form-control" />
+                <span asp-validation-for="Livro.QtdVolumes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ValorLocacao" class="control-label"></label>
-                <input asp-for="ValorLocacao" class="form-control" />
-                <span asp-validation-for="ValorLocacao" class="text-danger"></span>
+                <label asp-for="Livro.ValorLocacao" class="control-label"></label>
+                <input asp-for="Livro.ValorLocacao" class="form-control" />
+                <span asp-validation-for="Livro.ValorLocacao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
             </div>
         </form>
     </div>

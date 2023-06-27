@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System;
+    using Microsoft.EntityFrameworkCore;
 using Biblioteca.Data;
 using Biblioteca.Models;
 using Biblioteca.Models.ViewModels;
@@ -16,11 +16,34 @@ namespace Biblioteca.Controllers
             _context = context;
         }
 
+        // Método utilitário calcular multa. Utilizado em todas as views
+        public double CalculaMulta(DateTime dataPrevista)
+        {
+            TimeSpan diferenca = DateTime.Now - dataPrevista;
+
+            int diasDeAtraso = (int)diferenca.TotalDays;
+
+            if (diasDeAtraso > 0)
+            {
+                return diasDeAtraso * 2.50;
+            }
+
+            return 0.0;
+        }
+
         // GET: Locacaos
         public async Task<IActionResult> Index()
         {
             var bibliotecaContext = _context.Locacao.Include(l => l.Cliente).Include(l => l.Livro).Include(l => l.Usuario);
-            return View(await bibliotecaContext.ToListAsync());
+
+            var locacoes = await bibliotecaContext.ToListAsync();
+
+            foreach (var locacao in locacoes)
+            {
+                locacao.MultaAtraso = CalculaMulta(locacao.DataPrevista);
+            }
+
+            return View(locacoes);
         }
 
         // GET: Locacaos/Details/5
@@ -40,6 +63,8 @@ namespace Biblioteca.Controllers
             {
                 return NotFound();
             }
+
+            locacao.MultaAtraso = CalculaMulta(locacao.DataPrevista);
 
             return View(locacao);
         }
@@ -92,10 +117,16 @@ namespace Biblioteca.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", locacao.ClienteId);
-            ViewData["LivroId"] = new SelectList(_context.Livro, "Id", "Id", locacao.LivroId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Id", locacao.UsuarioId);
-            return View(locacao);
+            LocacaoFromViewModels locacaoViewModel = new LocacaoFromViewModels();
+            locacaoViewModel.Locacao = locacao; 
+            locacaoViewModel.Clientes = _context.Cliente.ToList();
+            locacaoViewModel.Livros = _context.Livro.ToList();
+            locacaoViewModel.Usuarios = _context.Usuario.ToList();
+
+            //ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "NomeCliente", locacao.ClienteId);
+            //ViewData["LivroId"] = new SelectList(_context.Livro, "Id", "NomeLivro", locacao.LivroId);
+            //ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Nome", locacao.UsuarioId);
+            return View(locacaoViewModel);
         }
 
         // POST: Locacaos/Edit/5
@@ -103,37 +134,17 @@ namespace Biblioteca.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LivroId,ClienteId,UsuarioId,DataHoraLocacao,DataPrevista,DataDevolucao,ValorLocacao,MultaAtraso")] Locacao locacao)
+        public async Task<IActionResult> Edit(LocacaoFromViewModels viewModel)
         {
-            if (id != locacao.Id)
+            if (!_context.Locacao.Any(s => s.Id == viewModel.Locacao.Id))
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(locacao);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LocacaoExists(locacao.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", locacao.ClienteId);
-            ViewData["LivroId"] = new SelectList(_context.Livro, "Id", "Id", locacao.LivroId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "Id", "Id", locacao.UsuarioId);
-            return View(locacao);
+            _context.Update(viewModel.Locacao);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Locacaos/Delete/5
@@ -153,6 +164,8 @@ namespace Biblioteca.Controllers
             {
                 return NotFound();
             }
+
+            locacao.MultaAtraso = CalculaMulta(locacao.DataPrevista);
 
             return View(locacao);
         }
