@@ -4,9 +4,9 @@
     ViewData["Title"] = "Novo cliente";
 }
 
-<h1>Novo cliente</h1>
+<h1>Cadastrar</h1>
 
-<h4>Dados do cliente</h4>
+<h4>Cliente</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="StatusAtivo" class="control-label"></label>
-                <input asp-for="StatusAtivo" class="form-control" />
+                <input type="checkbox"  asp-for="StatusAtivo" class="form-control-checkbox" />
                 <span asp-validation-for="StatusAtivo" class="text-danger"></span>
             </div>
             <div class="form-group">

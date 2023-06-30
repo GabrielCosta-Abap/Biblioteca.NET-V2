@@ -4,6 +4,7 @@ using System;
 using Biblioteca.Data;
 using Biblioteca.Models;
 using Biblioteca.Models.ViewModels;
+using NuGet.Packaging.Signing;
 
 namespace Biblioteca.Controllers
 {
@@ -29,6 +30,39 @@ namespace Biblioteca.Controllers
             }
 
             return 0.0;
+        }
+
+        // Método utilitário para validar campos do cadastro
+        public int ValidaLocacao(Locacao locacao)
+        {
+            DateTime dataAtual = DateTime.Now;
+            DateTime dataSemHora = locacao.DataHoraLocacao;
+
+            if ( dataSemHora > locacao.DataPrevista )
+            {
+                ModelState.AddModelError("", "Data prevista tem de ser no minimo um dia a mais que a data de locação");
+                return 1;
+            }
+
+            if ( dataSemHora > locacao.DataDevolucao )
+            {
+                ModelState.AddModelError("", "Data de devolução não pode ser menor que a data de locação");
+                return 1;
+            }
+
+            if ( dataSemHora.Date < dataAtual.Date )
+            {
+                ModelState.AddModelError("", "Data de locação não pode ser menor que data atual, os registros devem ser cadastrados diariamente");
+                return 1;
+            }
+
+            if ( locacao.ValorLocacao <= 0)
+            {
+                ModelState.AddModelError("", "Não são permitidos valores zerados ou negativos");
+                return 1;
+            }
+
+            return 0;
         }
 
         // GET: Locacaos
@@ -88,10 +122,27 @@ namespace Biblioteca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Locacao locacao)
         {
-            _context.Add(locacao);
-            _context.SaveChanges();
+            int retorno;
 
-            return RedirectToAction("Index");
+            LocacaoFromViewModels locacaoViewModel = new LocacaoFromViewModels();
+            locacaoViewModel.Locacao = locacao;
+            locacaoViewModel.Clientes = _context.Cliente.ToList();
+            locacaoViewModel.Livros = _context.Livro.ToList();
+            locacaoViewModel.Usuarios = _context.Usuario.ToList();
+
+            retorno = ValidaLocacao(locacao);
+
+            if (retorno == 0)
+            {
+                _context.Add(locacao);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            } else
+            {
+                return View(locacaoViewModel);
+            }
+
             //if (ModelState.IsValid)
             //{
             //    _context.Add(locacao);
@@ -136,15 +187,32 @@ namespace Biblioteca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(LocacaoFromViewModels viewModel)
         {
-            if (!_context.Locacao.Any(s => s.Id == viewModel.Locacao.Id))
+            int retorno;
+
+            LocacaoFromViewModels locacaoViewModel = new LocacaoFromViewModels();
+            locacaoViewModel.Locacao = viewModel.Locacao;
+            locacaoViewModel.Clientes = _context.Cliente.ToList();
+            locacaoViewModel.Livros = _context.Livro.ToList();
+            locacaoViewModel.Usuarios = _context.Usuario.ToList();
+
+            if (!_context.Livro.Any(s => s.Id == viewModel.Locacao.Id))
             {
                 return NotFound();
             }
 
-            _context.Update(viewModel.Locacao);
-            _context.SaveChanges();
+            retorno = ValidaLocacao(viewModel.Locacao);
 
-            return RedirectToAction("Index");
+            if (retorno == 0)
+            {
+                _context.Update(viewModel.Locacao);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(locacaoViewModel);
+            }
         }
 
         // GET: Locacaos/Delete/5

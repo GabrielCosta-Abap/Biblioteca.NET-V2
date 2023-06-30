@@ -4,9 +4,12 @@
     ViewData["Title"] = "Novo livro";
 }
 
-<h1>Novo livro</h1>
+<h1>Cadastrar</h1>
 
 <h4>Livro</h4>
+
+@Html.ValidationMessageFor(m => m.Livro)
+
 <hr />
 <div class="row">
     <div class="col-md-4">

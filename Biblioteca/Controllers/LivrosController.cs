@@ -23,6 +23,26 @@ namespace Biblioteca.Controllers
             _context = context;
         }
 
+        // Método utilitário para validar campos do cadastro
+        public int ValidaLivro(Livro livro)
+        {
+            int anoAtual = DateTime.Now.Year;
+
+            if (livro.Ano < 1000 || livro.Ano > anoAtual)
+            {
+                ModelState.AddModelError("", "Ano não pode ser menor que 1000 e nem maior que o ano atual");
+                return 1;
+            }
+
+            if (livro.ValorLocacao <= 0 || livro.NumVolume <= 0 || livro.QtdVolumes <= 0)
+            {
+                ModelState.AddModelError("", "Não são permitidos valores zerados ou negativos");
+                return 1;
+            }
+
+            return 0;
+        }
+
         // GET: Livros
         public async Task<IActionResult> Index()
         {
@@ -64,10 +84,24 @@ namespace Biblioteca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Livro livro)
         {
-            _context.Add(livro);
-            _context.SaveChanges();
+            int retorno;
 
-            return RedirectToAction("Index");
+            LivroFromViewModels livroViewModel = new LivroFromViewModels();
+            livroViewModel.Autors = _context.Autor.ToList();
+
+            retorno = ValidaLivro(livro);
+
+            if (retorno == 0)
+            {
+                _context.Add(livro);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(livroViewModel);
+            }
         }
 
         // GET: Livros/Edit/5
@@ -98,15 +132,29 @@ namespace Biblioteca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(LivroFromViewModels viewModel)
         {
+            int retorno;
+
+            LivroFromViewModels livroViewModel = new LivroFromViewModels();
+            livroViewModel.Autors = _context.Autor.ToList();
+
             if (!_context.Livro.Any(s => s.Id == viewModel.Livro.Id))
             {
                 return NotFound();
             }
 
-            _context.Update(viewModel.Livro);
-            _context.SaveChanges();
+            retorno = ValidaLivro(viewModel.Livro);
 
-            return RedirectToAction("Index");
+            if (retorno == 0)
+            {
+                _context.Update(viewModel.Livro);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(livroViewModel);
+            }
         }
 
         // GET: Livros/Delete/5
