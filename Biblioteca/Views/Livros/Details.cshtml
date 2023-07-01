@@ -1,4 +1,6 @@
-﻿@model Biblioteca.Models.Livro
+﻿@model Biblioteca.Models.ViewModels.LivroFromViewModels
+
+@*@model Biblioteca.Models.Livro*@
 
 @{
     ViewData["Title"] = "Exibir";
@@ -11,56 +13,106 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NomeLivro)
+            @Html.DisplayNameFor(model => model.Livro.NomeLivro)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NomeLivro)
+            @Html.DisplayFor(model => model.Livro.NomeLivro)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AutorId)
+            @Html.DisplayNameFor(model => model.Livro.AutorId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AutorId)
+            @Html.DisplayFor(model => model.Livro.AutorId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Editora)
+            @Html.DisplayNameFor(model => model.Livro.Editora)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Editora)
+            @Html.DisplayFor(model => model.Livro.Editora)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ano)
+            @Html.DisplayNameFor(model => model.Livro.Ano)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ano)
+            @Html.DisplayFor(model => model.Livro.Ano)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tema)
+            @Html.DisplayNameFor(model => model.Livro.tema)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tema)
+            @Html.DisplayFor(model => model.Livro.tema)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumVolume)
+            @Html.DisplayNameFor(model => model.Livro.NumVolume)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumVolume)
+            @Html.DisplayFor(model => model.Livro.NumVolume)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QtdVolumes)
+            @Html.DisplayNameFor(model => model.Livro.QtdVolumes)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QtdVolumes)
+            @Html.DisplayFor(model => model.Livro.QtdVolumes)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ValorLocacao)
+            @Html.DisplayNameFor(model => model.Livro.ValorLocacao)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ValorLocacao)
+            @Html.DisplayFor(model => model.Livro.ValorLocacao)
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Alterar</a> |
+    <h4>Histórico de locações deste livro: </h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Locacao.Cliente.NomeCliente)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Locacao.DataHoraLocacao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Locacao.DataDevolucao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Locacao.ValorLocacao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Locacao.MultaAtraso)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Locacaos)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cliente.NomeCliente)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataHoraLocacao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataDevolucao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorLocacao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MultaAtraso)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Livro.Id">Alterar</a> |
     <a asp-action="Index">Voltar à lista</a>
 </div>

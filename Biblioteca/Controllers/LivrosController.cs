@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Biblioteca.Data;
 using Biblioteca.Models;
 using Biblioteca.Models.ViewModels;
-using NuGet.Protocol.Plugins;
-using System.Net;
-using MessagePack.Formatters;
 
 namespace Biblioteca.Controllers
 {
@@ -52,22 +45,58 @@ namespace Biblioteca.Controllers
         }
 
         // GET: Livros/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null || _context.Livro == null)
             {
                 return NotFound();
             }
 
-            var livro = await _context.Livro
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (livro == null)
+            LivroFromViewModels LivroViewModel = new LivroFromViewModels();
+            LivroViewModel.Livro =  _context.Livro.FirstOrDefault(m => m.Id == id);
+
+            Console.WriteLine("ID DO LIVRO: ", LivroViewModel.Livro.Id);
+
+            LivroViewModel.Locacaos = _context.Locacao
+                                            .Include(l => l.Cliente)
+                                            .Where(l => l.LivroId == id)
+                                            .ToList();
+
+            if (LivroViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(livro);
+            return View(LivroViewModel);
         }
+
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null || _context.Livro == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    LivroFromViewModels LivroViewModel = new LivroFromViewModels();
+        //    //LivroViewModel.Livro = await _context.Livro.FirstOrDefaultAsync(m => m.Id == id);
+        //    LivroViewModel.Livro = await _context.Livro.FirstOrDefault(m => m.Id == id);
+
+        //    Console.WriteLine("ID DO LIVRO: ", LivroViewModel.Livro.Id);
+
+        //    LivroViewModel.Locacaos = _context.Locacao
+        //        .Where(l => l.LivroId == id)
+        //        .Include(l => l.Cliente)
+        //        .ToList(); 
+
+
+        //    //var livro = await _context.Livro.FirstOrDefaultAsync(m => m.Id == id);
+        //    if (LivroViewModel == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(LivroViewModel);
+        //}
 
         // GET: Livros/Create
         public IActionResult Create()
