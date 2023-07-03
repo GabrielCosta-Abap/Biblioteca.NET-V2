@@ -21,7 +21,7 @@ namespace Biblioteca.Models
         [Display(Name = "Dt/Hr Locação"), Required(ErrorMessage = "Campo Obrigatório")]
         public DateTime DataHoraLocacao { get; set;}
 
-        [Display(Name = "Dt. Prevista Devol."), DataType(DataType.Date)]
+        [Display(Name = "Dt. Prevista Devol."), DataType(DataType.Date), Required(ErrorMessage = "Campo Obrigatório")]
         public DateTime DataPrevista { get; set; }
 
         [Display(Name = "Dt. Devolução"), DataType(DataType.Date)]

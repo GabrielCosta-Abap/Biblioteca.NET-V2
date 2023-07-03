@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Biblioteca.Data;
 using Biblioteca.Models;
 using Biblioteca.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Biblioteca.Controllers
 {
@@ -30,6 +31,11 @@ namespace Biblioteca.Controllers
             if (livro.ValorLocacao <= 0 || livro.NumVolume <= 0 || livro.QtdVolumes <= 0)
             {
                 ModelState.AddModelError("", "Não são permitidos valores zerados ou negativos");
+            }
+
+            if (livro.QtdVolumes < livro.NumVolume)
+            {
+                ModelState.AddModelError("", "Quantidade de volumes não pode ser menor que o volume do livro.");
                 return 1;
             }
 
@@ -54,8 +60,6 @@ namespace Biblioteca.Controllers
 
             LivroFromViewModels LivroViewModel = new LivroFromViewModels();
             LivroViewModel.Livro =  _context.Livro.FirstOrDefault(m => m.Id == id);
-
-            Console.WriteLine("ID DO LIVRO: ", LivroViewModel.Livro.Id);
 
             LivroViewModel.Locacaos = _context.Locacao
                                             .Include(l => l.Cliente)

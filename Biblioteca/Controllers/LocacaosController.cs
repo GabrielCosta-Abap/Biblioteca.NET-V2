@@ -4,7 +4,6 @@ using System;
 using Biblioteca.Data;
 using Biblioteca.Models;
 using Biblioteca.Models.ViewModels;
-using NuGet.Packaging.Signing;
 
 namespace Biblioteca.Controllers
 {
@@ -18,9 +17,10 @@ namespace Biblioteca.Controllers
         }
 
         // Método utilitário calcular multa. Utilizado em todas as views
-        public double CalculaMulta(DateTime dataPrevista)
+        public double CalculaMulta(DateTime dataDevolucao, DateTime dataPrevista)
         {
-            TimeSpan diferenca = DateTime.Now - dataPrevista;
+            //TimeSpan diferenca = DateTime.Now - dataPrevista;
+            TimeSpan diferenca = dataDevolucao - dataPrevista;
 
             int diasDeAtraso = (int)diferenca.TotalDays;
 
@@ -74,7 +74,12 @@ namespace Biblioteca.Controllers
 
             foreach (var locacao in locacoes)
             {
-                locacao.MultaAtraso = CalculaMulta(locacao.DataPrevista);
+                var dataDevolucao = new DateTime((int)(locacao.DataDevolucao?.Year ?? DateTime.Now.Year),
+                                                 (int)(locacao.DataDevolucao?.Month ?? DateTime.Now.Month),
+                                                 (int)(locacao.DataDevolucao?.Day ?? DateTime.Now.Day),
+                                                 0, 0, 0);
+
+                locacao.MultaAtraso = CalculaMulta(dataDevolucao, locacao.DataPrevista);
             }
 
             return View(locacoes);
@@ -98,7 +103,12 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            locacao.MultaAtraso = CalculaMulta(locacao.DataPrevista);
+            var dataDevolucao = new DateTime((int)(locacao.DataDevolucao?.Year ?? DateTime.Now.Year),
+                                 (int)(locacao.DataDevolucao?.Month ?? DateTime.Now.Month),
+                                 (int)(locacao.DataDevolucao?.Day ?? DateTime.Now.Day),
+                                 0, 0, 0);
+
+            locacao.MultaAtraso = CalculaMulta(dataDevolucao, locacao.DataPrevista);
 
             return View(locacao);
         }
@@ -233,7 +243,11 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            locacao.MultaAtraso = CalculaMulta(locacao.DataPrevista);
+            var dataDevolucao = new DateTime((int)(locacao.DataDevolucao?.Year ?? DateTime.Now.Year),
+                                             (int)(locacao.DataDevolucao?.Month ?? DateTime.Now.Month),
+                                             (int)(locacao.DataDevolucao?.Day ?? DateTime.Now.Day),
+                                            0, 0, 0);
+            locacao.MultaAtraso = CalculaMulta(dataDevolucao, locacao.DataPrevista);
 
             return View(locacao);
         }
