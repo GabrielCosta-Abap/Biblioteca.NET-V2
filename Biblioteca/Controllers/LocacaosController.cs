@@ -50,11 +50,11 @@ namespace Biblioteca.Controllers
                 return 1;
             }
 
-            if ( dataSemHora.Date < dataAtual.Date )
-            {
-                ModelState.AddModelError("", "Data de locação não pode ser menor que data atual, os registros devem ser cadastrados diariamente");
-                return 1;
-            }
+            //if ( dataSemHora.Date < dataAtual.Date )
+            //{
+            //    ModelState.AddModelError("", "Data de locação não pode ser menor que data atual, os registros devem ser cadastrados diariamente");
+            //    return 1;
+            //}
 
             if ( locacao.ValorLocacao <= 0)
             {
@@ -205,7 +205,7 @@ namespace Biblioteca.Controllers
             locacaoViewModel.Livros = _context.Livro.ToList();
             locacaoViewModel.Usuarios = _context.Usuario.ToList();
 
-            if (!_context.Livro.Any(s => s.Id == viewModel.Locacao.Id))
+            if (!_context.Livro.Any(s => s.Id == viewModel.Locacao.LivroId))
             {
                 return NotFound();
             }

@@ -10,6 +10,8 @@ namespace Biblioteca.Models
         [Display(Name = "Nome do autor"), Required(ErrorMessage = "Campo Obrigatório")]
         public string NomeAutor { get; set; }
 
+
+        [EmailAddress(ErrorMessage = "O campo deve ser um endereço de e-mail válido.")]
         [Display(Name = "E-mail"), Required(ErrorMessage = "Campo Obrigatório")]
         public string Email { get; set; }
 

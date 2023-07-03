@@ -59,7 +59,8 @@ namespace Biblioteca.Controllers
             }
 
             LivroFromViewModels LivroViewModel = new LivroFromViewModels();
-            LivroViewModel.Livro =  _context.Livro.FirstOrDefault(m => m.Id == id);
+            LivroViewModel.Livro =  _context.Livro.Include(l => l.Autor)
+                                                  .FirstOrDefault(m => m.Id == id);
 
             LivroViewModel.Locacaos = _context.Locacao
                                             .Include(l => l.Cliente)
@@ -199,7 +200,9 @@ namespace Biblioteca.Controllers
             }
 
             var livro = await _context.Livro
+                .Include(l => l.Autor)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (livro == null)
             {
                 return NotFound();
